@@ -1,19 +1,6 @@
 import vine from "@vinejs/vine";
 import {initAppSettings} from "backend-batteries";
-
-export enum AppLogLevel {
-    COMBINED = 'combined',
-    COMMON = 'common',
-    DEV = 'dev',
-    SHORT = 'short',
-    TINY = 'tiny'
-}
-
-export enum AppMode {
-    DEV = 'development',
-    TEST = 'testing',
-    PROD = 'production'
-}
+import {AppLogLevel, AppMode} from "./types/settings";
 
 
 const configSchema = vine.object({
@@ -25,7 +12,4 @@ const configSchema = vine.object({
     PORT: vine.number()
 })
 
-const preparedSettings = initAppSettings(process.env, {prefix: 'APP_'})
-
-const AppSettings = await vine.compile(configSchema).validate(preparedSettings)
-export {AppSettings};
+export const AppSettings = await vine.compile(configSchema).validate(initAppSettings(process.env, {prefix: 'APP_'}))

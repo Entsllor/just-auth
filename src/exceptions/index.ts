@@ -1,4 +1,4 @@
-import {BadRequest, NotFound} from "backend-batteries/dist/index";
+import {BadRequest, NotFound} from "backend-batteries";
 
 export class UserNotFound extends NotFound {
 }

@@ -2,14 +2,14 @@ import express from "express";
 import {PathWithUserId, SignupDto} from "../schemas/users";
 import {NotUniqueEmail, NotUniqueUsername, UserNotFound} from "../exceptions";
 
-import {Body, Params, raise, uuid4} from 'backend-batteries'
+import {Body, Params, raise, uuid4, valuesOf} from 'backend-batteries'
 
 export const router = express.Router({});
 const users: Record<string, any> = {};
 
 router.post('/sign-up', Body(SignupDto), ({body}, res) => {
     const id = uuid4()
-    Object.values(users).find(user => {
+    valuesOf(users).find(user => {
         user.email === body.email && raise(NotUniqueEmail)
         user.username === body.username && raise(NotUniqueUsername)
     })

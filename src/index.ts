@@ -3,7 +3,8 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import {routers} from "./routers";
 import {ErrorHandlerMiddleware} from "./middlewares/error-handler-middleware";
-import {AppMode, AppSettings} from "./settings";
+import {AppSettings} from "./settings";
+import {AppMode} from "./types/settings";
 
 export const app = express();
 
