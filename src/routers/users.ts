@@ -12,7 +12,7 @@ router.post('/sign-up', Body(SignupDto), ({body}, res) => {
     valuesOf(users).find(user => {
         user.email === body.email && raise(NotUniqueEmail)
         user.username === body.username && raise(NotUniqueUsername)
-    })
+    });
     users[id] = {...body, id: id, password: undefined}
     res.status(201).send(users[id])
 })

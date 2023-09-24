@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "nodemon src/index.ts  --watch .env"
+    "start": "nodemon src/index.ts  --watch .env --watch src"
   },
   "dependencies": {
     "@vinejs/vine": "^1.6.0",

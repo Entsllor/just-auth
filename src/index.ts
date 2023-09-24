@@ -12,7 +12,6 @@ app.use(logger(AppSettings.LOG_LEVEL));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(ErrorHandlerMiddleware)
 
 routers.forEach(([path, router]) => {
     app.use(path, router);
@@ -21,5 +20,8 @@ routers.forEach(([path, router]) => {
 if (AppSettings.MODE === AppMode.DEV) {
     console.log(AppSettings)
 }
+
+app.use(ErrorHandlerMiddleware)
+
 app.listen(AppSettings.PORT)
 
