@@ -4,10 +4,10 @@ import logger from "morgan";
 import {routers} from "./routers";
 import {ErrorHandlerMiddleware} from "./middlewares/error-handler-middleware";
 import {AppSettings} from "./settings";
-import {AppMode} from "./types/settings";
+import chalk from "chalk";
 
 export const app = express();
-
+console.log(Object.entries(AppSettings).map(([k, v]) => chalk.bold.blue(k) + `=${v}`).join('\n'))
 app.use(logger(AppSettings.LOG_LEVEL));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -17,11 +17,6 @@ routers.forEach(([path, router]) => {
     app.use(path, router);
 })
 
-if (AppSettings.MODE === AppMode.DEV) {
-    console.log(AppSettings)
-}
-
 app.use(ErrorHandlerMiddleware)
 
 app.listen(AppSettings.PORT)
-
