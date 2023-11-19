@@ -1,20 +1,15 @@
-import {ConstructableSchema, FieldContext, Infer} from "@vinejs/vine/build/src/types";
+import {ConstructableSchema, FieldOptions, Infer, Validation} from "@vinejs/vine/build/src/types";
 import {isIsoDateString, isValidDate} from "backend-batteries";
-import vine from "@vinejs/vine";
+import vine, {BaseLiteralType, Vine} from "@vinejs/vine";
 
-type ParserFieldContext = Pick<FieldContext, 'data' | 'parent' | 'meta'>;
-type InferableVineType = ConstructableSchema<any, any> & { parse: (value: unknown, ctx?: ParserFieldContext) => any };
+type InferableVineType = ConstructableSchema<any, any> & { parse: (value: unknown, ctx?: any) => any };
 
 export type WithDefaultParser = <TVineSchema extends InferableVineType>(vineType: TVineSchema, defaultValue: Infer<TVineSchema>) => TVineSchema
 
 export const withDefault: WithDefaultParser = (vineType, defaultValue) => {
-    // If value extends undefined (not null) then validator return default value
-    return vineType.parse((value: unknown) => value === undefined ? defaultValue : value)
-};
-
-export const coalesce: WithDefaultParser = (vineType, defaultValue) => {
     // If value is undefined or null then validator return default value
     return vineType.parse((value: unknown) => value ?? defaultValue)
+
 };
 
 interface IDateTimeRuleTypeOptions {
@@ -25,8 +20,12 @@ interface IDateTimeRuleTypeOptions {
 interface IDateRuleTypeOptions extends IDateTimeRuleTypeOptions {
 }
 
-export const datetimeRule = vine.createRule((value, options: IDateTimeRuleTypeOptions, field) => {
-    if (!isIsoDateString(value)) {
+const datetimeRule = vine.createRule((value, options: IDateTimeRuleTypeOptions, field) => {
+    if (value instanceof Date) {
+        if (Number.isNaN(value.getTime())) {
+            return field.report(`{{ field }} is not a valid date.`, 'datetime', field)
+        }
+    } else if (!isIsoDateString(value)) {
         return field.report(`{{ field }} is not a valid date-string. Expected date in format ${new Date().toISOString()}`, 'datetime', field);
     }
     if (options.min && options.min.toISOString() > value) {
@@ -42,8 +41,11 @@ function isoDatetimeToDateString(isoDateTime: string | Date): string {
     return (typeof isoDateTime === "string" ? isoDateTime : isoDateTime.toISOString()).slice(0, 10)
 }
 
-export const dateRule = vine.createRule((value, options: IDateRuleTypeOptions, field) => {
-    if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value) || !isValidDate(value)) {
+const dateRule = vine.createRule((value, options: IDateRuleTypeOptions, field) => {
+    if (!isValidDate(value)) {
+        return field.report(`{{ field }} is not a valid date. Expected date in format ${new Date().toISOString().slice(0, 10)}`, 'date', field)
+    }
+    if (typeof value === "string" && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
         return field.report(`{{ field }} is not a valid date-string. Expected date in format ${new Date().toISOString().slice(0, 10)}`, 'date', field);
     }
     const parsedValue = isoDatetimeToDateString(new Date(value))
@@ -56,19 +58,37 @@ export const dateRule = vine.createRule((value, options: IDateRuleTypeOptions, f
     return parsedValue
 })
 
-export function datetimeType(options: IDateTimeRuleTypeOptions = {}) {
-    return vine.string().trim().use(datetimeRule(options))
-}
 
-export function dateType(options: IDateRuleTypeOptions = {}) {
+function dateType(options: IDateRuleTypeOptions = {}) {
     return vine.string().trim().use(dateRule(options));
 }
 
-export function datetimeOutType() {
-    // vine.js has no built-in datetime type
-    return vine.any()
+function timezoneType() {
+    return vine.enum(Intl.supportedValuesOf('timeZone'))
 }
 
-export function timezoneType() {
-    return vine.enum(Intl.supportedValuesOf('timeZone'))
+class VineDateTime extends BaseLiteralType<Date, Date> {
+    readonly #fieldOptions?: IDateTimeRuleTypeOptions;
+
+    constructor(fieldOptions?: IDateTimeRuleTypeOptions, options?: FieldOptions, validations?: Validation<any>[]) {
+        super(options, validations || [datetimeRule(fieldOptions ?? {})]);
+        this.#fieldOptions = fieldOptions
+    }
+
+    clone() {
+        return new VineDateTime(this.#fieldOptions, this.cloneOptions(), this.cloneValidations()) as this
+    }
+}
+
+Vine.macro('datetime', (options?) => new VineDateTime(options))
+Vine.macro('date', dateType)
+Vine.macro('tz', timezoneType)
+
+declare module "@vinejs/vine" {
+    interface Vine {
+        datetime(options?: IDateRuleTypeOptions): VineDateTime
+
+        date: typeof dateType
+        tz: typeof timezoneType
+    }
 }

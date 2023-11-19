@@ -1,3 +1,5 @@
+import "./helpers/validation/vine";
+import 'express-async-errors';
 import express from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -7,6 +9,7 @@ import {appSettings} from "./settings";
 import chalk from "chalk";
 
 export const app = express();
+
 console.log(Object.entries(appSettings).map(([k, v]) => chalk.bold.blue(k) + `=${v}`).join('\n'))
 app.use(logger(appSettings.LOG_LEVEL));
 

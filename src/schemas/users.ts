@@ -1,7 +1,5 @@
 import vine from "@vinejs/vine";
 import {Infer} from "@vinejs/vine/build/src/types";
-import {datetimeOutType, dateType, timezoneType} from "../helpers/parsers";
-
 
 export const SignupDto = vine.object({
     email: vine.string().email().normalizeEmail(),
@@ -11,8 +9,8 @@ export const SignupDto = vine.object({
     firstName: vine.string().optional(),
     secondName: vine.string().optional(),
 
-    birthdate: dateType({min: new Date('1900-01-01'), max: new Date()}).optional(),
-    timezone: timezoneType().optional()
+    birthdate: vine.date({min: new Date('1900-01-01'), max: new Date()}).optional(),
+    timezone: vine.tz().optional()
 })
 
 
@@ -24,19 +22,19 @@ export const PublicUserDto = vine.object({
     lastName: vine.string().optional(),
     firstName: vine.string().optional(),
     secondName: vine.string().optional(),
-    createdAt: datetimeOutType(),
+    createdAt: vine.datetime(),
 })
 
 
 export const PrivateUserDto = vine.object({
     ...PublicUserDto.getProperties(),
     email: vine.string(),
-    updatedAt: datetimeOutType(),
+    updatedAt: vine.datetime(),
 })
 
 export const PathWithUserId = vine.object({
     id: vine.string().uuid()
 })
 
-export const publicUserDto = vine.compile(PublicUserDto)
-export const privateUserDto = vine.compile(PrivateUserDto)
+export const publicUserValidator = vine.compile(PublicUserDto)
+export const privateUserValidator = vine.compile(PrivateUserDto)

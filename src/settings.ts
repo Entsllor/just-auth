@@ -1,7 +1,7 @@
 import vine from "@vinejs/vine";
 import {initAppSettings} from "backend-batteries";
 import {AppLogLevel, AppMode} from "./types/settings";
-import {withDefault} from "./helpers/parsers";
+import {withDefault} from "./helpers/validation";
 
 
 const configSchema = vine.object({
