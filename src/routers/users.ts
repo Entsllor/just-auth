@@ -1,23 +1,20 @@
 import express from "express";
-import {PathWithUserId, SignupDto} from "../schemas/users";
-import {NotUniqueEmail, NotUniqueUsername, UserNotFound} from "../exceptions";
+import {PathWithUserId, privateUserDto, publicUserDto, SignupDto} from "../schemas/users";
+import {UserNotFound} from "../exceptions";
 
-import {Body, Params, raise, uuid4, valuesOf} from 'backend-batteries'
+import {raise} from 'backend-batteries'
+import {Body, Params} from "../helpers/pipes";
+import {readUser, signupUser} from "../services/users";
+import {prepareResponse} from "../helpers/parsers/prepare-response";
 
 export const router = express.Router({});
-const users: Record<string, any> = {};
 
-router.post('/sign-up', Body(SignupDto), ({body}, res) => {
-    const id = uuid4()
-    valuesOf(users).find(user => {
-        user.email === body.email && raise(NotUniqueEmail)
-        user.username === body.username && raise(NotUniqueUsername)
-    });
-    users[id] = {...body, id: id, password: undefined}
-    res.status(201).send(users[id])
+router.post('/sign-up', Body(SignupDto), async ({body}, res) => {
+    const user = await signupUser(body);
+    res.status(201).send(await prepareResponse(privateUserDto, user))
 })
 
-router.get('/:id', Params(PathWithUserId), ({params}, res) => {
-    const user = users[params.id] ?? raise(UserNotFound)
-    res.status(200).send(user);
+router.get('/:id', Params(PathWithUserId), async ({params}, res) => {
+    const user = await readUser(params.id) ?? raise(UserNotFound)
+    res.status(200).send(await prepareResponse(publicUserDto, user));
 })

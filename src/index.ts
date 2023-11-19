@@ -3,12 +3,13 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import {routers} from "./routers";
 import {ErrorHandlerMiddleware} from "./middlewares/error-handler-middleware";
-import {AppSettings} from "./settings";
+import {appSettings} from "./settings";
 import chalk from "chalk";
 
 export const app = express();
-console.log(Object.entries(AppSettings).map(([k, v]) => chalk.bold.blue(k) + `=${v}`).join('\n'))
-app.use(logger(AppSettings.LOG_LEVEL));
+console.log(Object.entries(appSettings).map(([k, v]) => chalk.bold.blue(k) + `=${v}`).join('\n'))
+app.use(logger(appSettings.LOG_LEVEL));
+
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -19,4 +20,4 @@ routers.forEach(([path, router]) => {
 
 app.use(ErrorHandlerMiddleware)
 
-app.listen(AppSettings.PORT)
+app.listen(appSettings.PORT)

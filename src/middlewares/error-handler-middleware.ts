@@ -7,8 +7,12 @@ export function ErrorHandlerMiddleware(err: any, request: Request, res: Response
         res.status(422).send(err.messages)
     } else if (err instanceof AppException) {
         res.status(err.status).send(err.asJson())
-    } else if (err.status && err.body) {
-        res.status(err.status).send(err.body)
+    } else if (err.status) {
+        if (err.message) {
+            res.status(err.status).json({message: err.message, status: err.status});
+        } else if (err.body) {
+            res.status(err.status).send(err.body);
+        }
     } else {
         console.error(err.message)
         res.status(err.status ?? 500).send(new InternalServerError({}).asJson())
