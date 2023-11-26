@@ -1,32 +1,34 @@
 import {User} from "../models/user";
 import {SignupDto} from "../schemas/users";
-import {uuid4, valuesOf} from "backend-batteries";
 import bcrypt from 'bcrypt'
 import {IUsersRepo} from "../types/repos/users";
 import {omit} from "radash";
+import {getDb} from "../helpers/get-db";
 
 class UsersDbRepo implements IUsersRepo {
-    _users: Record<string, User> = {}
+    get dataSource() {
+        return getDb().getRepository(User)
+    }
 
-    async getDuplicate(email: string, username: string): Promise<User | undefined> {
-        return valuesOf(this._users).find(user => user.email === email || user.username === username)
+    async getDuplicate(email: string, username: string): Promise<User | null> {
+        return await this.dataSource.findOne({where: [{email: email}, {username: username}]})
     }
 
     async create(userData: SignupDto) {
-        const user: User = {
-            id: uuid4(),
+        const user = this.dataSource.create({
             password: await bcrypt.hash(userData.password, 12),
-            createdAt: new Date(),
-            updatedAt: new Date(),
             ...omit(userData, ['password']),
             birthdate: userData.birthdate ? new Date(userData.birthdate) : undefined,
-        };
-        this._users[user.id] = user
-        return user
+        })
+        return this.dataSource.save(user)
     }
 
-    getById(id: string): Promise<User | undefined> {
-        return Promise.resolve(this._users[id]);
+    getById(id: string): Promise<User | null> {
+        return this.dataSource.findOne({where: {id}});
+    }
+
+    search(): Promise<User[]> {
+        return this.dataSource.find();
     }
 }
 

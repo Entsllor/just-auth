@@ -5,12 +5,13 @@ import {withDefault} from "./helpers/validation";
 
 
 const configSchema = vine.object({
+    DB_NAME: vine.string(),
     DB_HOST: vine.string(),
+    DB_PORT: vine.number(),
     DB_USER: vine.string(),
     DB_PASSWORD: vine.string(),
     DB_LOGGING: withDefault(vine.boolean(), false),
-    DB_SCHEMA: withDefault(vine.string(), 'just-auth'),
-    DB_NAME: vine.string(),
+    DB_SCHEMA: withDefault(vine.string(), 'just_auth'),
     LOG_LEVEL: withDefault(vine.enum(AppLogLevel), AppLogLevel.DEV),
     MODE: vine.enum(AppMode),
     PORT: vine.number(),

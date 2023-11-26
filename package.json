@@ -4,9 +4,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "nodemon src/index.ts  --watch .env --watch src"
+    "start": "nodemon src/index.ts  --watch .env --watch src",
+    "migration:create": "typeorm-ts-node-esm migration:create",
+    "migration:generate": "typeorm-ts-node-esm migration:generate -d ./src/data-source.ts",
+    "migration:run": "typeorm-ts-node-esm migration:run -d ./src/data-source.ts",
+    "migration:revert": "typeorm-ts-node-esm migration:revert -d ./src/data-source.ts"
   },
   "dependencies": {
+    "@types/on-finished": "^2.3.4",
     "@vinejs/vine": "^1.6.0",
     "backend-batteries": "^0.1.6",
     "bcrypt": "^5.1.1",
@@ -16,7 +21,9 @@
     "dotenv": "^16.3.1",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
+    "jose": "^5.1.1",
     "morgan": "~1.9.1",
+    "on-finished": "^2.4.1",
     "pg": "^8.4.0",
     "radash": "^11.0.0",
     "reflect-metadata": "^0.1.13",

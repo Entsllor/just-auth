@@ -14,21 +14,21 @@ export class User {
     @Column()
     password: string;
 
-    @Column()
+    @Column({nullable: true})
     firstName?: string
 
-    @Column()
+    @Column({nullable: true})
     lastName?: string
 
-    @Column()
+    @Column({nullable: true})
     timezone?: string;
 
-    @Column({type: 'time with time zone'})
+    @Column({type: 'timestamptz', nullable: true})
     birthdate?: Date;
 
-    @CreateDateColumn({type: 'time with time zone'})
+    @CreateDateColumn({type: 'timestamptz'})
     createdAt: Date;
 
-    @UpdateDateColumn({type: 'time with time zone'})
+    @UpdateDateColumn({type: 'timestamptz'})
     updatedAt: Date;
 }
