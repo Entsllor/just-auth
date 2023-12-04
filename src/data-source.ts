@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import {DataSource} from "typeorm"
 import {appSettings} from "./settings";
+import {AppMode} from "./types/settings";
 
 export const db = new DataSource({
     type: 'postgres',
@@ -9,7 +10,7 @@ export const db = new DataSource({
     username: appSettings.DB_USER,
     password: appSettings.DB_PASSWORD,
     database: appSettings.DB_NAME,
-    synchronize: false,
+    synchronize: appSettings.MODE === AppMode.DEV,
     schema: appSettings.DB_SCHEMA,
     logging: appSettings.DB_LOGGING,
     entities: ['src/models/*.ts'],

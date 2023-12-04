@@ -1,8 +1,10 @@
-import {SignupDto} from "../schemas/users";
+import {LoginDto, SignupDto} from "../schemas/users";
 import {Users} from "../repos/users";
 import {raise} from "backend-batteries";
-import {NotUniqueEmail, NotUniqueUsername} from "../exceptions";
+import {NotUniqueEmail, NotUniqueUsername, UserNotFound} from "../exceptions";
 import {User} from "../models/user";
+import {createTokens} from "./tokens";
+import {RefreshToken} from "../models/refresh-token";
 
 export async function signupUser(signupData: SignupDto): Promise<User> {
     const duplicate = await Users.getDuplicate(signupData.email, signupData.username)
@@ -13,6 +15,13 @@ export async function signupUser(signupData: SignupDto): Promise<User> {
     return await Users.create(signupData);
 }
 
+export async function login(loginDto: LoginDto, userInfo: {
+    ip: string,
+    userAgent?: string
+}): Promise<[RefreshToken, string]> {
+    const user = await Users.getByIdentity({email: loginDto.email}) || raise(UserNotFound)
+    return await createTokens({...userInfo, id: user.id, username: user.username})
+}
 
 export async function readUser(userId: string): Promise<User | null> {
     return await Users.getById(userId);

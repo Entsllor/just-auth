@@ -13,8 +13,13 @@ export const SignupDto = vine.object({
     timezone: vine.tz().optional()
 })
 
-
 export type SignupDto = Infer<typeof SignupDto>
+
+export const LoginDto = vine.object({
+    email: vine.string().email().normalizeEmail(),
+    password: vine.string()
+})
+export type LoginDto = Infer<typeof LoginDto>
 
 export const PublicUserDto = vine.object({
     id: vine.string().uuid(),

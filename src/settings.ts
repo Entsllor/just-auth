@@ -15,6 +15,10 @@ const configSchema = vine.object({
     LOG_LEVEL: withDefault(vine.enum(AppLogLevel), AppLogLevel.DEV),
     MODE: vine.enum(AppMode),
     PORT: vine.number(),
+
+    JWT_SECRET_KEY: vine.string(),
+    ACCESS_TOKEN_LIFETIME_IN_MINUTES: withDefault(vine.number(), 15),
+    REFRESH_TOKEN_LIFETIME_IN_MINUTES: withDefault(vine.number(), 60 * 24 * 15),
 })
 
 export const appSettings = await vine.compile(configSchema).validate(initAppSettings(process.env, {prefix: 'APP_'}))

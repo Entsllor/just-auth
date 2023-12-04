@@ -8,5 +8,7 @@ export interface IUsersRepo {
 
     getById(id: string): Promise<User | null>
 
+    getByIdentity(filters: { username: string } | { id: string } | { email: string }): Promise<User | null>
+
     search(): Promise<User[]>
 }

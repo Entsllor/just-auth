@@ -21,6 +21,9 @@ export function errorHandlerMiddleware(err: any, _request: Request, res: Respons
         }
     } else {
         console.error(err.message)
-        res.status(err.status ?? 500).send(new InternalServerError({}).asJson())
+        if (!res.headersSent) {
+            res.status(err.status ?? 500)
+        }
+        res.send(new InternalServerError({}).asJson());
     }
 }
