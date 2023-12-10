@@ -1,10 +1,16 @@
 import vine from "@vinejs/vine";
 import {Infer} from "@vinejs/vine/build/src/types";
 
+const usernameType = vine.string()
+    .minLength(5)
+    .toLowerCase()
+    .regex(/^[a-zA-Z_0-9]+$/)
+
+
 export const SignupDto = vine.object({
     email: vine.string().email().normalizeEmail(),
     password: vine.string().minLength(8).maxLength(63),
-    username: vine.string().minLength(1),
+    username: usernameType,
     lastName: vine.string().optional(),
     firstName: vine.string().optional(),
     secondName: vine.string().optional(),
@@ -23,7 +29,7 @@ export type LoginDto = Infer<typeof LoginDto>
 
 export const PublicUserDto = vine.object({
     id: vine.string().uuid(),
-    username: vine.string().minLength(1),
+    username: usernameType,
     lastName: vine.string().optional(),
     firstName: vine.string().optional(),
     secondName: vine.string().optional(),

@@ -5,4 +5,6 @@ export interface IRefreshTokensRepo {
     create(userId: UUID, userAgent: string, authorIp: string): Promise<RefreshToken>
 
     markAsRevoked(userId: UUID, tokenBody: string): Promise<boolean>
+
+    getActive(body: string, userId: string): Promise<RefreshToken | null>
 }

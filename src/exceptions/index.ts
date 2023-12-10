@@ -24,9 +24,13 @@ export class AccessTokenRequired extends AuthError {
 }
 
 export class FailedToVerifyToken extends AuthError {
-    description = 'Token is not valid, possibly expired'
+    description = 'Token is invalid, possibly expired'
 }
 
 export class CannotGetUserFromToken extends AuthError {
     description = 'User is deleted or token is invalid'
+}
+
+export class RefreshTokenRequired extends AuthError {
+    description = 'Cannot get refresh tokens from cookies'
 }

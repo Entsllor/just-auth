@@ -5,13 +5,13 @@ import {IAccessTokenPayload} from "../types/tokens";
 
 class AccessTokensRepo implements IAccessTokenRepo<IAccessTokenPayload> {
     create(data: IAccessTokenPayload): string {
-        return jwt.sign(data, appSettings.JWT_SECRET_KEY, {expiresIn: appSettings.ACCESS_TOKEN_LIFETIME_IN_MINUTES * 60 * 1000});
+        return jwt.sign(data, appSettings.JWT_SECRET_KEY, {expiresIn: 1 + 'm'});
     }
 
-    verify(token: string) {
-        return jwt.verify(token, appSettings.JWT_SECRET_KEY, (error, decoded: any) => {
+    verify(token: string, ignoreExpiration: boolean = false) {
+        return jwt.verify(token, appSettings.JWT_SECRET_KEY, {ignoreExpiration},(error, decoded: any) => {
             if (error) {
-                return undefined
+                throw error
             }
             return {
                 sub: decoded.sub,

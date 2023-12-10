@@ -20,7 +20,7 @@ export function errorHandlerMiddleware(err: any, _request: Request, res: Respons
             res.status(err.status).send(err.body);
         }
     } else {
-        console.error(err.message)
+        console.error(err)
         if (!res.headersSent) {
             res.status(err.status ?? 500)
         }

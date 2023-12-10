@@ -16,11 +16,15 @@ export class RefreshToken {
     @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
+    @Column({type: "timestamptz"})
+    expireAt: Date;
+
     @Column({length: 31})
     authorIp: string;
 
     @Column({length: 255})
     userAgent: string;
+
 
     @Column({type: 'timestamptz', nullable: true})
     revokedAt?: Date;

@@ -18,4 +18,7 @@ export const db = new DataSource({
     subscribers: [],
     useUTC: true,
 })
-db.initialize().catch(console.error)
+
+db.initialize().catch(() => {
+    throw new Error('Cannot connect to DB')
+})
