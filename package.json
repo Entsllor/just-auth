@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "bun run ./src/index.ts",
+    "style": "bun prettier ./src -w --log-level=warn",
     "migration:create": "typeorm-ts-node-esm migration:create",
     "migration:generate": "typeorm-ts-node-esm migration:generate -d src/core/data-source.ts",
     "migration:run": "typeorm-ts-node-esm migration:run -d src/core/data-source.ts",
@@ -42,6 +43,7 @@
     "@types/uuid": "^9.0.2",
     "bun-types": "^1.0.16",
     "nodemon": "^3.0.1",
+    "prettier": "^3.1.1",
     "ts-node": "^10.9.1"
   },
   "engines": {

@@ -27,7 +27,7 @@ export function createApp(): [Express, {onShutDown: (err: any) => void}] {
         console.log(
             Object.entries(appSettings)
                 .map(([k, v]) => chalk.bold.blue(k) + `=${v}`)
-                .join("\n"),
+                .join("\n")
         );
     }
 

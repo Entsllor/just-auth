@@ -6,8 +6,8 @@ import {Users} from "../src/repos/users";
 import {AccessTokens} from "../src/repos/access-tokens";
 import {User} from "../src/models/user";
 
-import {db} from "../src/core/data-source";
 import {RefreshToken} from "../src/models/refresh-token";
+import {db} from "../src/core/db";
 
 export let [app] = createApp();
 export let appClient = request(app);

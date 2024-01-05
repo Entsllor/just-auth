@@ -18,5 +18,3 @@ export const datasource = new DataSource({
     synchronize: appSettings.MODE === AppMode.TEST,
     dropSchema: appSettings.MODE === AppMode.TEST,
 });
-
-export const db = await datasource.initialize()

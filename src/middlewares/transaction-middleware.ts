@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import onFinished from "on-finished";
-
-import {db} from "../core/data-source";
+import {db} from "../core/db";
 
 export async function transactionMiddlewareBefore(_request: Request, res: Response, next: NextFunction) {
     const queryRunner = db.createQueryRunner();
