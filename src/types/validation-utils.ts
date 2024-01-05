@@ -1,3 +1,3 @@
-export type ValidatorType<T=any> = {
-    validate: (data: any) => Promise<T>
-}
+export type ValidatorType<T = any> = {
+    validate: (data: any) => Promise<T>;
+};

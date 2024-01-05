@@ -81,14 +81,14 @@ class VineDateTime extends BaseLiteralType<Date, Date> {
 }
 
 Vine.macro('datetime', (options?) => new VineDateTime(options))
-Vine.macro('date', dateType)
+Vine.macro('day', dateType)
 Vine.macro('tz', timezoneType)
 
 declare module "@vinejs/vine" {
     interface Vine {
         datetime(options?: IDateRuleTypeOptions): VineDateTime
 
-        date: typeof dateType
+        day: typeof dateType
         tz: typeof timezoneType
     }
 }

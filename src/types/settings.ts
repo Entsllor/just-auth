@@ -1,13 +1,13 @@
 export enum AppLogLevel {
-    COMBINED = 'combined',
-    COMMON = 'common',
-    DEV = 'dev',
-    SHORT = 'short',
-    TINY = 'tiny'
+    COMBINED = "combined",
+    COMMON = "common",
+    DEV = "dev",
+    SHORT = "short",
+    TINY = "tiny",
 }
 
 export enum AppMode {
-    DEV = 'development',
-    TEST = 'testing',
-    PROD = 'production'
+    DEV = "development",
+    TEST = "testing",
+    PROD = "production",
 }

@@ -1,10 +1,10 @@
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm"
+import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {RefreshToken} from "./refresh-token";
 
 @Entity({})
 export class User {
-    @PrimaryGeneratedColumn('uuid')
-    id: string
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column({length: 63, unique: true})
     username: string;
@@ -16,23 +16,23 @@ export class User {
     password: string;
 
     @Column({nullable: true, length: 63})
-    firstName?: string
+    firstName?: string;
 
     @Column({nullable: true, length: 63})
-    lastName?: string
+    lastName?: string;
 
     @Column({nullable: true, length: 63})
     timezone?: string;
 
-    @Column({type: 'timestamptz', nullable: true})
+    @Column({type: "timestamptz", nullable: true})
     birthdate?: Date;
 
-    @CreateDateColumn({type: 'timestamptz'})
+    @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
-    @UpdateDateColumn({type: 'timestamptz'})
+    @UpdateDateColumn({type: "timestamptz"})
     updatedAt: Date;
 
     @OneToMany(() => RefreshToken, object => object.user)
-    refreshTokens: RefreshToken[]
+    refreshTokens: RefreshToken[];
 }

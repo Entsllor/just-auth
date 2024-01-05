@@ -1,17 +1,16 @@
 import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn} from "typeorm";
 import type {User} from "./user";
-import {UUID} from "backend-batteries";
 
 @Entity({})
 export class RefreshToken {
     @PrimaryColumn({length: 63})
     body: string;
 
-    @ManyToOne("User", (user: User) => user.refreshTokens)
+    @ManyToOne("User", (user: User) => user.refreshTokens, {onDelete: "CASCADE"})
     user: User;
 
     @Column()
-    userId: UUID;
+    userId: string;
 
     @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
@@ -25,7 +24,6 @@ export class RefreshToken {
     @Column({length: 255})
     userAgent: string;
 
-
-    @Column({type: 'timestamptz', nullable: true})
+    @Column({type: "timestamptz", nullable: true})
     revokedAt?: Date;
 }

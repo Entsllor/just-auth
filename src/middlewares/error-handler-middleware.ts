@@ -4,13 +4,13 @@ import {AppException, InternalServerError} from "backend-batteries";
 
 export function errorHandlerMiddleware(err: any, _request: Request, res: Response, _nextFunction: NextFunction) {
     if (err instanceof errors.E_VALIDATION_ERROR) {
-        res.status(422).send(err.messages)
+        res.status(422).send(err.messages);
     } else if (err instanceof AppException) {
         if (err.callback) {
-            err.callback(err)
+            err.callback(err);
         }
         if (err.status >= 500) {
-            console.log(err)
+            console.log(err);
         }
         res.status(err.status).send(err.asJson());
     } else if (err.status) {
@@ -20,9 +20,9 @@ export function errorHandlerMiddleware(err: any, _request: Request, res: Respons
             res.status(err.status).send(err.body);
         }
     } else {
-        console.error(err)
+        console.error(err);
         if (!res.headersSent) {
-            res.status(err.status ?? 500)
+            res.status(err.status ?? 500);
         }
         res.send(new InternalServerError({}).asJson());
     }

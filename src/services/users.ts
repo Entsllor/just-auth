@@ -1,26 +1,30 @@
 import {LoginDto, SignupDto} from "../schemas/users";
 import {Users} from "../repos/users";
 import {raise} from "backend-batteries";
-import {NotUniqueEmail, NotUniqueUsername, UserNotFound} from "../exceptions";
+import {FailedToLogin, NotUniqueEmail, NotUniqueUsername} from "../exceptions";
 import {User} from "../models/user";
 import {createTokens} from "./tokens";
 import {RefreshToken} from "../models/refresh-token";
 
 export async function signupUser(signupData: SignupDto): Promise<User> {
-    const duplicate = await Users.getDuplicate(signupData.email, signupData.username)
+    const duplicate = await Users.getDuplicate(signupData.email, signupData.username);
     if (duplicate) {
-        duplicate.email === signupData.email && raise(NotUniqueEmail)
-        duplicate.username === signupData.username && raise(NotUniqueUsername)
+        duplicate.email === signupData.email && raise(NotUniqueEmail);
+        duplicate.username === signupData.username && raise(NotUniqueUsername);
     }
     return await Users.create(signupData);
 }
 
-export async function login(loginDto: LoginDto, userInfo: {
-    ip: string,
-    userAgent?: string
-}): Promise<[RefreshToken, string]> {
-    const user = await Users.getByIdentity({email: loginDto.email}) || raise(UserNotFound)
-    return await createTokens({...userInfo, id: user.id, username: user.username})
+export async function login(
+    loginDto: LoginDto,
+    userInfo: {
+        ip: string;
+        userAgent?: string;
+    }
+): Promise<[RefreshToken, string]> {
+    const user = (await Users.getByIdentity({email: loginDto.email})) || raise(FailedToLogin);
+    (await Bun.password.verify(loginDto.password, user.password)) || raise(FailedToLogin);
+    return await createTokens({...userInfo, id: user.id, username: user.username});
 }
 
 export async function readUser(userId: string): Promise<User | null> {
