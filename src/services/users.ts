@@ -1,10 +1,11 @@
 import {LoginDto, SignupDto} from "../schemas/users";
 import {Users} from "../repos/users";
 import {raise} from "backend-batteries";
-import {FailedToLogin, NotUniqueEmail, NotUniqueUsername} from "../exceptions";
+import {FailedToLogin, NotUniqueEmail, NotUniqueUsername} from "../helpers/exceptions";
 import {User} from "../models/user";
 import {createTokens} from "./tokens";
 import {RefreshToken} from "../models/refresh-token";
+import {verifyPassword} from "../helpers/passwords";
 
 export async function signupUser(signupData: SignupDto): Promise<User> {
     const duplicate = await Users.getDuplicate(signupData.email, signupData.username);
@@ -23,7 +24,7 @@ export async function login(
     }
 ): Promise<[RefreshToken, string]> {
     const user = (await Users.getByIdentity({email: loginDto.email})) || raise(FailedToLogin);
-    (await Bun.password.verify(loginDto.password, user.password)) || raise(FailedToLogin);
+    (await verifyPassword(loginDto.password, user.password)) || raise(FailedToLogin);
     return await createTokens({...userInfo, id: user.id, username: user.username});
 }
 

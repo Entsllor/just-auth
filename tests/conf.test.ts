@@ -9,7 +9,7 @@ import {User} from "../src/models/user";
 import {RefreshToken} from "../src/models/refresh-token";
 import {db} from "../src/core/db";
 
-export let [app] = createApp();
+export let app = createApp();
 export let appClient = request(app);
 export let currentUser: User | undefined; // use for authorized requests (see getAuthClient)
 

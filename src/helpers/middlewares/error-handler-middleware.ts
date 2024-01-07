@@ -3,6 +3,7 @@ import {errors} from "@vinejs/vine";
 import {AppException, InternalServerError} from "backend-batteries";
 
 export function errorHandlerMiddleware(err: any, _request: Request, res: Response, _nextFunction: NextFunction) {
+    res.locals.hasError = true;
     if (err instanceof errors.E_VALIDATION_ERROR) {
         res.status(422).send(err.messages);
     } else if (err instanceof AppException) {

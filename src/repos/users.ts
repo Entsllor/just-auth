@@ -2,6 +2,7 @@ import {User} from "../models/user";
 import {SignupDto} from "../schemas/users";
 import {IUsersRepo} from "../types/repos/users";
 import {IBaseDbRepo} from "./base";
+import {hashPassword} from "../helpers/passwords";
 
 class UsersDbRepo extends IBaseDbRepo<User> implements IUsersRepo {
     model = User;
@@ -13,7 +14,7 @@ class UsersDbRepo extends IBaseDbRepo<User> implements IUsersRepo {
     async create(userData: SignupDto) {
         const user = this.repo.create({
             ...userData,
-            password: await Bun.password.hash(userData.password),
+            password: await hashPassword(userData.password),
             birthdate: userData.birthdate ? new Date(userData.birthdate) : undefined,
         });
         return this.repo.save(user);

@@ -3,7 +3,7 @@ import {User} from "../../models/user";
 import {Users} from "../../repos/users";
 import {AccessTokens} from "../../repos/access-tokens";
 import {raise, UUID} from "backend-batteries";
-import {AccessTokenRequired, CannotGetUserFromToken, FailedToVerifyToken} from "../../exceptions";
+import {AccessTokenRequired, CannotGetUserFromToken, FailedToVerifyToken} from "../exceptions";
 import {snake} from "radash";
 
 export function AuthRequired<

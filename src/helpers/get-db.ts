@@ -1,5 +1,5 @@
 import {DataSource} from "typeorm";
-import {reqCtx} from "../middlewares";
+import {reqCtx} from "./middlewares";
 
 import {db} from "../core/db";
 

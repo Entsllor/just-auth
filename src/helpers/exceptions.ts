@@ -1,8 +1,14 @@
 import {AppException, InternalServerError, NotFound} from "backend-batteries";
 
-export class UserNotFound extends NotFound {}
+export class UserNotFound extends NotFound {
+}
 
-export class FailedToLogin extends AppException {}
+export class FailedToLogin extends AppException {
+}
+
+export class InvalidPath extends NotFound {
+    entityName = "endpoint";
+}
 
 export class NotUniqueEmail extends AppException {
     description = "Email should be unique";
@@ -21,7 +27,8 @@ export class AuthError extends AppException {
     description = "This endpoint asserts valid access token in cookies";
 }
 
-export class AccessTokenRequired extends AuthError {}
+export class AccessTokenRequired extends AuthError {
+}
 
 export class FailedToVerifyToken extends AuthError {
     description = "Token is invalid, possibly expired";

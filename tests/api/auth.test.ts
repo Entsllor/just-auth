@@ -4,7 +4,7 @@ import {appClient} from "../conf.test";
 import {PrivateUserDto, SignupDto} from "../../src/schemas/users";
 import {validateResponse, withError} from "../testing-helpers";
 import {Users} from "../../src/repos/users";
-import {AccessTokenRequired, FailedToLogin, RefreshTokenRequired} from "../../src/exceptions";
+import {AccessTokenRequired, FailedToLogin, RefreshTokenRequired} from "../../src/helpers/exceptions";
 import {RefreshTokens} from "../../src/repos/refresh-tokens";
 import {AccessTokens} from "../../src/repos/access-tokens";
 
@@ -18,7 +18,6 @@ const userData: SignupDto = {
     secondName: undefined,
     timezone: undefined,
 };
-
 
 describe("signup", async () => {
     const userSignupData = {username: "johny", email: "test@example.com", password: "password"};
@@ -72,18 +71,29 @@ describe("refresh-tokens", async () => {
     it("access token required", async () => {
         const user = await Users.create(userData);
         const refreshToken = await RefreshTokens.create(user.id, "180.180.180.180", "test");
-        await appClient.post("/auth/refresh").set("Cookie", [`refreshToken=${refreshToken.body}`]).expect(401).expect(withError(AccessTokenRequired));
+        await appClient
+            .post("/auth/refresh")
+            .set("Cookie", [`refreshToken=${refreshToken.body}`])
+            .expect(401)
+            .expect(withError(AccessTokenRequired));
     });
     it("refresh token required", async () => {
         const user = await Users.create(userData);
         const accessToken = AccessTokens.create({sub: user.id, username: user.username});
-        await appClient.post("/auth/refresh").set("Cookie", [`accessToken=${accessToken}`]).expect(401).expect(withError(RefreshTokenRequired));
+        await appClient
+            .post("/auth/refresh")
+            .set("Cookie", [`accessToken=${accessToken}`])
+            .expect(401)
+            .expect(withError(RefreshTokenRequired));
     });
     it("should return new tokens pair", async () => {
         const user = await Users.create(userData);
         const accessToken = AccessTokens.create({sub: user.id, username: user.username});
         const refreshToken = await RefreshTokens.create(user.id, "180.180.180.180", "test");
-        const resp = await appClient.post("/auth/refresh").set("Cookie", [`accessToken=${accessToken};refreshToken=${refreshToken.body}`]).expect(204);
+        const resp = await appClient
+            .post("/auth/refresh")
+            .set("Cookie", [`accessToken=${accessToken};refreshToken=${refreshToken.body}`])
+            .expect(204);
         const cookies = resp.headers["set-cookie"] as unknown as string[];
         expect(cookies[0]).toStartWith("refreshToken");
         expect(cookies[0]).toContain("HttpOnly");
@@ -96,7 +106,10 @@ describe("logout", async () => {
     it("should clear cookies", async () => {
         const user = await Users.create(userData);
         const refreshToken = await RefreshTokens.create(user.id, "180.180.180.180", "test");
-        const resp = await appClient.post("/auth/logout").set("Cookie", [`refreshToken=${refreshToken.body}`]).expect(204);
+        const resp = await appClient
+            .post("/auth/logout")
+            .set("Cookie", [`refreshToken=${refreshToken.body}`])
+            .expect(204);
         const cookies = resp.headers["set-cookie"] as unknown as string[];
         expect(cookies[0]).toContain("accessToken=;");
         expect(cookies[1]).toContain("refreshToken=;");
