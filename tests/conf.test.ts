@@ -15,7 +15,7 @@ export let currentUser: User | undefined; // use for authorized requests (see ge
 
 beforeEach(async () => {
     const entities = db.entityMetadatas;
-    const tableNames = entities.map((entity) => `"${entity.tableName}"`).join(", ");
+    const tableNames = entities.map(entity => `"${entity.tableName}"`).join(", ");
     await db.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
     currentUser = undefined;
 });

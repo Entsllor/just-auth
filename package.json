@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "bun run ./src/index.ts",
+    "run-migrations-and-start": "bun migration:run && bun start",
     "style": "bun prettier ./src -w --log-level=warn",
     "migration:create": "typeorm-ts-node-esm migration:create",
     "migration:generate": "typeorm-ts-node-esm migration:generate -d src/core/data-source.ts",

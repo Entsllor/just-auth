@@ -1,10 +1,56 @@
 version: '3'
 services:
-  postgres:
+  # database
+  db:
     image: "postgres:16.1-alpine"
-    ports:
-      - "5400:5432"
     environment:
       POSTGRES_USER: ${APP_DB_USER}
       POSTGRES_PASSWORD: ${APP_DB_PASSWORD}
       POSTGRES_DB: ${APP_DB_NAME}
+      PGPORT: ${APP_DB_PORT}
+    volumes:
+      - just-auth-postgres:/var/lib/postgresql/data
+    # dependent modules should start only when db is ready to accept connections
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ${APP_DB_NAME} -U ${APP_DB_USER}" ]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+    networks:
+      - app.network
+
+  # main-application
+  just.auth:
+    build:
+      dockerfile: infrastructure/docker/Dockerfile
+      context: "."
+    depends_on:
+      db: # run only if db is ready
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      APP_DB_HOST: db
+    networks:
+      - app.network
+
+  # nginx
+  nginx:
+    image: "nginx"
+    depends_on:
+      - just.auth
+    environment:
+      APP_PORT: ${APP_PORT}
+    ports:
+      - "80:80"
+    volumes:
+      - ./infrastructure/nginx/conf.d/:/etc/nginx/conf.d/:ro
+      - ./infrastructure/nginx/ssl/:/etc/ssl/:ro
+    networks:
+      - app.network
+
+volumes:
+  just-auth-postgres:
+networks:
+  app.network:
+    driver: bridge

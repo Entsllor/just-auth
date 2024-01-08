@@ -14,7 +14,7 @@ import {InvalidPath} from "./helpers/exceptions";
 export function createApp(): Express {
     const app = express();
     // echo env variables
-    if (appSettings.MODE !== AppMode.TEST) {
+    if (appSettings.MODE === AppMode.DEV) {
         console.log(
             Object.entries(appSettings)
                 .map(([k, v]) => chalk.bold.blue(k) + `=${v}`)

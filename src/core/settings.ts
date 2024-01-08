@@ -21,7 +21,9 @@ const configSchema = vine.object({
 
 async function initSettings() {
     try {
-        return await vine.compile(configSchema).validate(initAppSettings(process.env, {prefix: "APP_"}));
+        return await vine
+            .compile(configSchema)
+            .validate(initAppSettings({...process.env, APP_MODE: process.env.NODE_ENV}, {prefix: "APP_"}));
     } catch (error) {
         if (error instanceof errors.E_VALIDATION_ERROR) {
             // array created by SimpleErrorReporter
