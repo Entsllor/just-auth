@@ -17,7 +17,7 @@ jobs:
     - uses: adambirds/docker-compose-action@v1.3.0
       with:
         env-file: .env.test
-        compose-file: "./docker-compose.yml"
+        compose-file: "infrastructure/docker/docker-compose-test.yml"
         down-flags: "--volumes"
         test-container: backend
         test-command: "bun test"
