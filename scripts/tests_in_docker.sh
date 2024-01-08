@@ -4,7 +4,7 @@ docker compose \
   -p test-in-docker \
   -f ../infrastructure/docker/docker-compose-test.yml \
   up --build \
-  --abort-on-container-exit --exit-code-from just.auth
+  --abort-on-container-exit --exit-code-from backend
 
 
 docker compose \

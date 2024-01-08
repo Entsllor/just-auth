@@ -9,7 +9,7 @@ services:
       POSTGRES_DB: ${APP_DB_NAME}
       PGPORT: ${APP_DB_PORT}
     volumes:
-      - just-auth-postgres:/var/lib/postgresql/data
+      - db.volume:/var/lib/postgresql/data
     # dependent modules should start only when db is ready to accept connections
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d ${APP_DB_NAME} -U ${APP_DB_USER}" ]
@@ -20,7 +20,7 @@ services:
       - app.network
 
   # main-application
-  just.auth:
+  backend:
     build:
       dockerfile: infrastructure/docker/Dockerfile
       context: "."
@@ -38,7 +38,7 @@ services:
   nginx:
     image: "nginx"
     depends_on:
-      - just.auth
+      - backend
     environment:
       APP_PORT: ${APP_PORT}
     ports:
@@ -50,7 +50,7 @@ services:
       - app.network
 
 volumes:
-  just-auth-postgres:
+  db.volume:
 networks:
   app.network:
     driver: bridge
