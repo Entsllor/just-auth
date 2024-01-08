@@ -14,10 +14,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: adambirds/docker-compose-action@v1.3.0
-      with:
-        compose-file: "infrastructure/docker/docker-compose-test.yml"
-        up-flags: "--env-file=.env.test"
-        down-flags: "--volumes"
-        test-container: backend
-        test-command: "bun test"
+    - name: run tests
+      run: |
+        cd ./scripts
+        . ./tests_in_docker.sh
