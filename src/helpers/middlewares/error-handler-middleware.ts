@@ -13,7 +13,7 @@ export function errorHandlerMiddleware(err: any, _request: Request, res: Respons
         if (err.status >= 500) {
             console.log(err);
         }
-        res.status(err.status).send(err.asJson());
+        res.status(err.status).send(err.toJSON());
     } else if (err.status) {
         if (err.message) {
             res.status(err.status).json({message: err.message, status: err.status});
@@ -25,6 +25,6 @@ export function errorHandlerMiddleware(err: any, _request: Request, res: Respons
         if (!res.headersSent) {
             res.status(err.status ?? 500);
         }
-        res.send(new InternalServerError({}).asJson());
+        res.send(new InternalServerError({}).toJSON());
     }
 }

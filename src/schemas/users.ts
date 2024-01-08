@@ -47,4 +47,4 @@ export const PathWithUserId = vine.object({
 
 export const publicUserValidator = vine.compile(PublicUserDto);
 export const privateUserValidator = vine.compile(PrivateUserDto);
-export const publicUsersValidator = vine.compile(vine.array(PrivateUserDto));
+export const publicUsersValidator = vine.compile(vine.array(PublicUserDto));

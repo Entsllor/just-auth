@@ -21,7 +21,7 @@ describe("signup user", async () => {
                 ...userData,
                 username: faker.internet.userName(),
             }),
-            new NotUniqueUsername()
+            new NotUniqueEmail()
         );
     });
 
@@ -32,7 +32,7 @@ describe("signup user", async () => {
                 ...userData,
                 email: faker.internet.email(),
             }),
-            new NotUniqueEmail()
+            new NotUniqueUsername()
         );
     });
 });

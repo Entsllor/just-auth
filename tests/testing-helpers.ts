@@ -8,7 +8,10 @@ export function logResponse(response: any) {
     console.log(response.body, response.status);
 }
 
-export async function validateResponse(response: Response, schema: VineValidator<any, any> | BaseLiteralType<any, any> | BaseType<any, any>) {
+export async function validateResponse(
+    response: Response,
+    schema: VineValidator<any, any> | BaseLiteralType<any, any> | BaseType<any, any>
+) {
     expect(response.body).toBeTruthy();
     const body = response.body as Record<any, any>;
     if (!Object.hasOwn(schema, "validate")) {
@@ -29,7 +32,7 @@ export function withError<T extends AppException>(error: (new () => T) | T) {
         if (typeof error === "function") {
             error = new (error as any)() as T;
         }
-        expect(error.asJson().error).toBe((res.body as Record<any, any>).error);
+        expect(error.toJSON().error).toBe((res.body as Record<any, any>).error);
     };
 }
 
@@ -39,7 +42,7 @@ export function withFields(obj: any): (res: Response) => void {
             throw new Error("Invalid Body");
         }
         const body = res.body as Record<any, any>;
-        const errors: {field: string, type: string, expected: any, received?: any}[] = [];
+        const errors: {field: string; type: string; expected: any; received?: any}[] = [];
         Object.entries(obj).forEach(([f, v]) => {
             console.log(body[f], v);
 
