@@ -8,6 +8,6 @@ export enum AppLogLevel {
 
 export enum AppMode {
     DEV = "development",
-    TEST = "testing",
+    TEST = "test",
     PROD = "production",
 }

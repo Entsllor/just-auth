@@ -15,7 +15,7 @@ This is a template project for building an authentication server using Express.j
 ### Prerequisites
 
 Before you begin, make sure you have docker compose installed on your machine.
-Also you should install bun.sh to start application in dev mode.
+Also, you should install bun.sh (version 1.0.21 or higher) to start application in dev mode.
 
 ### Installation
 

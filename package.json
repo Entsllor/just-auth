@@ -13,6 +13,7 @@
     "migration:revert": "typeorm-ts-node-esm migration:revert -d src/core/data-source.ts"
   },
   "dependencies": {
+    "@types/bun": "^1.0.0",
     "@vinejs/vine": "^1.6.0",
     "backend-batteries": "^0.2.2",
     "body-parser": "^1.19.1",
@@ -42,7 +43,6 @@
     "@types/on-finished": "^2.3.4",
     "@types/supertest": "^2.0.16",
     "@types/uuid": "^9.0.2",
-    "bun-types": "^1.0.16",
     "nodemon": "^3.0.1",
     "prettier": "^3.1.1",
     "ts-node": "^10.9.1"
