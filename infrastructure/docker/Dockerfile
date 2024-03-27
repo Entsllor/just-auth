@@ -9,7 +9,6 @@ COPY ../../bun.lockb .
 RUN bun install --frozen-lockfile --production
 
 COPY ../../src ./src
-COPY ../../package.json .
 COPY ../../tsconfig.json .
 COPY ../../bunfig.toml .
 

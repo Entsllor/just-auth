@@ -2,7 +2,9 @@ import {AppException, InternalServerError, NotFound} from "backend-batteries";
 
 export class UserNotFound extends NotFound {}
 
-export class FailedToLogin extends AppException {}
+export class FailedToLogin extends AppException {
+    message = "Wrong email or password"
+}
 
 export class InvalidPath extends NotFound {
     entityName = "endpoint";

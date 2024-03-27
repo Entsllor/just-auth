@@ -17,4 +17,4 @@ jobs:
     - name: run tests
       run: |
         cd ./scripts
-        . ./tests_in_docker.sh
+        . ./tests-in-docker.sh

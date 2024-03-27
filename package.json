@@ -1,6 +1,6 @@
 {
   "name": "just-auth",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@vinejs/vine": "^1.6.0",
-    "backend-batteries": "^0.2.2",
+    "backend-batteries": "0.2.4",
     "body-parser": "^1.19.1",
     "chalk": "^5.3.0",
     "cookie-parser": "~1.4.4",

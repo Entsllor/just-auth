@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-. ./up_test_env.sh || return 1
+. up-test-env.sh || return 1
 sleep 2
 cd ..
-bun test
+bun test --env-file .env.test
 cd ./scripts || return 1
-. ./down_test_env.sh
+. down-test-env.sh

@@ -11,7 +11,7 @@ export const reqCtx = new AsyncLocalStorage<IRequestContext>();
 let idSeq = 0;
 
 export async function requestContextMiddleware(req: Request, res: Response, next: NextFunction) {
-    const store: IRequestContext = {res, req, id: idSeq};
+    const store: IRequestContext = {res, req, id: ++idSeq};
     reqCtx.run(store, () => {
         next();
     });

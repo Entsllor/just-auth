@@ -29,6 +29,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    volumes:
+      - ./keys/auth:/usr/app/keys/auth:ro
     environment:
       APP_DB_HOST: db
     networks:
