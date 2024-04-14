@@ -151,6 +151,9 @@ pnpm-debug.log*
 .settings/
 *.sublime-workspace
 
+# secrets
+keys/
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

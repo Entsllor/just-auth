@@ -12,18 +12,24 @@ import {CurrentUserPipe} from "./decorators/current-user.pipe";
 import {ExpiredJwtStrategy} from "./jwt/expired-jwt.strategy";
 import {KeyValueStorage} from "../common/key-value-storage/key-value-storage.service";
 import {JwtBlockList} from "./jwt/jwt.blocklist";
+import {AuthSecrets} from "./auth.secrets";
 
 @Module({
     imports: [UsersModule, JwtModule.registerAsync({
-        inject: [Settings],
-        useFactory: (settings: Settings) => ({
-            secret: settings.vars.JWT_SECRET_KEY,
-            signOptions: {expiresIn: settings.vars.JWT_LIFETIME_IN_MINUTES * 60},
+        extraProviders: [AuthSecrets],
+        inject: [Settings, AuthSecrets],
+        useFactory: (settings: Settings, secrets: AuthSecrets) => ({
+            publicKey: secrets.publicKey,
+            privateKey: secrets.privateKey,
+            signOptions: {
+                expiresIn: settings.vars.JWT_LIFETIME_IN_MINUTES * 60,
+                algorithm: settings.vars.JWT_ALGORITHM,
+            },
         }),
     }), RefreshTokensModule],
-    providers: [AuthService, PasswordsService, UsersService, CurrentUserPipe, JwtStrategy, ExpiredJwtStrategy, KeyValueStorage, JwtBlockList],
+    providers: [AuthSecrets, AuthService, PasswordsService, UsersService, CurrentUserPipe, JwtStrategy, ExpiredJwtStrategy, KeyValueStorage, JwtBlockList],
     controllers: [AuthController],
-    exports: [PasswordsService]
+    exports: [PasswordsService],
 })
 export class AuthModule {
 }

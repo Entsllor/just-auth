@@ -6,7 +6,16 @@ export enum AppMode {
     test = "test",
 }
 
-// todo delete zod
+enum AvailableAlgorithm {
+    RS256 = "RS256",
+    RS384 = "RS384",
+    RS512 = "RS512",
+    HS256 = "HS256",
+    HS384 = "HS384",
+    HS512 = "HS512"
+}
+
+
 export const configSchema = zod.object({
     NODE_ENV: zod.nativeEnum(AppMode),
     BACKEND_PORT: zod.coerce.number().default(3000),
@@ -28,9 +37,10 @@ export const configSchema = zod.object({
     REDIS_HOST: zod.string().default("localhost"),
     REDIS_DB: zod.coerce.number().default(5),
 
-    JWT_SECRET_KEY: zod.string(),
+    JWT_ALGORITHM: zod.nativeEnum(AvailableAlgorithm).default(AvailableAlgorithm.HS256),
     JWT_LIFETIME_IN_MINUTES: zod.coerce.number().default(15),
     REFRESH_TOKEN_LIFETIME_IN_MINUTES: zod.coerce.number().default(15),
 });
 
-export type ISettings = zod.TypeOf<typeof configSchema>
+
+export type ISettings = zod.output<typeof configSchema>
