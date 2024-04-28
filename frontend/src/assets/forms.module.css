@@ -1,0 +1,33 @@
+.header {
+    margin: var(--space-xxxs) 0;
+    text-align: center;
+}
+
+.button {
+    width: 100%;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--space-xs);
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+small.invalid {
+    color: var(--c-text-error);
+}
+
+small.warn {
+    color: var(--c-text-warning);
+}

@@ -61,6 +61,8 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@swc/core": "^1.4.2",
+    "@swc/jest": "^0.2.36",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.6",
     "@types/date-fns": "^2.6.0",
@@ -82,8 +84,7 @@
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3",
-    "@swc/core": "^1.4.2",
-    "@swc/jest": "^0.2.36"
-  }
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

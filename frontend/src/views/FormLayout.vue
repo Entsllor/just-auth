@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Panel from "primevue/panel";
+import Panel from "primevue/panel"
 </script>
 
 <template>
@@ -30,5 +30,10 @@ import Panel from "primevue/panel";
 }
 
 .panel {
+    transition: max-height var(--smooth);
+}
+
+.panel > :global(.p-panel-header) {
+    display: none;
 }
 </style>

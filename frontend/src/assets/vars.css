@@ -30,6 +30,8 @@
     --width-xxl: calc(5.25 * var(--width-unit));
     --width-xxxl: calc(8.5 * var(--width-unit));
     --width-xxxxl: calc(13.75 * var(--width-unit));
+
+    --smooth: 200ms ease-out;
 }
 
 /* semantic color variables for this project */
@@ -37,8 +39,9 @@
     --c-bg: var(--c-white);
     --c-bg-secondary: var(--surface-200);
     --c-text: var(--c-black);
+    --c-text-error: var(--red-500);
+    --c-text-warning: var(--orange-500);
 }
-
 
 @media (prefers-color-scheme: dark) {
 }

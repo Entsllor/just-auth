@@ -5,9 +5,17 @@ import {HttpAdapterHost} from "@nestjs/core";
 import {AllExceptionsFilter} from "./helpers/exceptions/all-exceptions.filter";
 import {AppExceptionsFilter} from "./helpers/exceptions/app-exceptions.filter";
 import {ZodValidationExceptionFilter} from "./helpers/exceptions/zod-exception.filter";
-import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import {SwaggerModule} from "@nestjs/swagger";
+import {generateSwaggerSchema} from "./helpers/docs/generate-swagger-schema";
 
-export async function prepareApp(app: INestApplication, settings: ISettings, extra: {withSwagger?: boolean}) {
+export async function prepareApp(
+    app: INestApplication,
+    settings: ISettings,
+    extra: {
+        withSwagger?: boolean;
+        updateFrontendApiClient?: boolean;
+    }
+) {
     app.use(cookieParser());
     {
         // exceptions filters
@@ -17,13 +25,7 @@ export async function prepareApp(app: INestApplication, settings: ISettings, ext
         app.useGlobalFilters(new ZodValidationExceptionFilter(httpAdapter));
     }
     if (extra.withSwagger) {
-        // swagger
-        const swaggerConfig = new DocumentBuilder()
-            .setTitle(settings.APP_NAME)
-            .setDescription(`The ${settings.APP_NAME} API description`)
-            .setVersion(settings.APP_VERSION).addBearerAuth()
-            .build();
-        const document = SwaggerModule.createDocument(app, swaggerConfig);
+        const document = generateSwaggerSchema(app, settings);
         SwaggerModule.setup(settings.SWAGGER_URL_PREFIX, app, document);
     }
 }

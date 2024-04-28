@@ -1,4 +1,7 @@
 import {z} from "nestjs-zod/z";
 
-const timeZones = Intl.supportedValuesOf("timeZone") as [string, ...string[]];
-export const timeZoneType = z.enum(timeZones);
+const timeZones = new Set(Intl.supportedValuesOf("timeZone") as [string, ...string[]]);
+export const timeZoneType = z
+    .string()
+    .trim()
+    .refine(arg => timeZones.has(arg), "Invalid time zone");
