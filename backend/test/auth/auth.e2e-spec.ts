@@ -8,7 +8,7 @@ import {initUserClient} from "../fixtures/init-user-client";
 import {hasResponseError} from "../helpers/has-response-error";
 import {
     FailedToRefreshTokenForbidden,
-    NotValidELoginOrPassword,
+    NotValidLoginOrPassword,
     RefreshTokenRequired,
 } from "../../src/auth/auth.exceptions";
 
@@ -41,14 +41,14 @@ describe("users", () => {
             await client.post("/auth/login").send({
                 email: "wrong" + userData.email,
                 password: userData.password,
-            }).expect(hasResponseError(NotValidELoginOrPassword));
+            }).expect(hasResponseError(NotValidLoginOrPassword));
         });
 
         it("should raise error if password mismatch", async () => {
             await client.post("/auth/login").send({
                 email: userData.email,
                 password: "wrong" + userData.password,
-            }).expect(hasResponseError(NotValidELoginOrPassword));
+            }).expect(hasResponseError(NotValidLoginOrPassword));
         });
     });
 

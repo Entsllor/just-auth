@@ -12,7 +12,7 @@ import {RefreshTokensRepository} from "./refresh-tokens/refresh-tokens.repositor
 import {generateMock} from "@anatine/zod-mock";
 import {SignupSchema} from "./users/users.schemas";
 import {expectError} from "../helpers/tests-utils/expect-error";
-import {NotValidELoginOrPassword} from "./auth.exceptions";
+import {NotValidLoginOrPassword} from "./auth.exceptions";
 import {RefreshToken} from "./refresh-tokens/refresh-tokens.enity";
 import {JwtBlockList} from "./jwt/jwt.blocklist";
 
@@ -50,12 +50,12 @@ describe("AuthService", () => {
 
         it("should raise error if email not match", async () => {
             const user = await createUser();
-            await expectError(service.authByEmailAndPassword("wrong" + user.email, userData.password), new NotValidELoginOrPassword);
+            await expectError(service.authByEmailAndPassword("wrong" + user.email, userData.password), new NotValidLoginOrPassword);
         });
 
         it("should raise error if password not match", async () => {
             const user = await createUser();
-            await expectError(service.authByEmailAndPassword(user.email, "wrong" + userData.password), new NotValidELoginOrPassword);
+            await expectError(service.authByEmailAndPassword(user.email, "wrong" + userData.password), new NotValidLoginOrPassword);
         });
     });
 

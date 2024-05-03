@@ -8,7 +8,7 @@ import {prepareApp} from "./app.prepare";
 patchNestJsSwagger();
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {cors: true});
     const settings = app.get(Settings).vars;
     await prepareApp(app, settings, {withSwagger: true});
     await app.listen(settings.BACKEND_PORT);

@@ -5,21 +5,37 @@ import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import {computed, ref} from "vue"
 import formsStyles from "@/assets/forms.module.css"
-
-function submit() {}
+import {useSending} from "@/hooks/use-sending"
+import {api} from "@/api/client"
+import AlertMessage from "@/components/AlertMessage.vue"
 
 const password = ref("")
 const confirmPassword = ref("")
 const email = ref("")
-
+const username = ref("")
 const hasPasswordMismatch = computed(
     () => !!confirmPassword.value && !!password.value && password.value !== confirmPassword.value
 )
 const passwordHasLeadingSpace = computed(() => /^.*\s$/.test(password.value))
 const passwordHasTrailingSpace = computed(() => /^\s.*$/.test(password.value))
+const {error, send, isSending} = useSending(api.auth.signup)
 const canSubmit = computed(
-    () => !!email.value && !!password.value && !!confirmPassword.value && !hasPasswordMismatch.value
+    () =>
+        !!email.value &&
+        !!password.value &&
+        !!confirmPassword.value &&
+        !hasPasswordMismatch.value &&
+        !!username.value
 )
+
+function submit() {
+    send({
+        email: email.value,
+        password: password.value,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        username: username.value
+    })
+}
 </script>
 
 <template>
@@ -33,6 +49,14 @@ const canSubmit = computed(
                     type="email"
                     id="email"
                     placeholder="Enter your email"
+                />
+            </div>
+            <div :class="formsStyles.field">
+                <label for="username">Username</label>
+                <InputText
+                    v-model.trim="username"
+                    id="username"
+                    placeholder="Enter your username"
                 />
             </div>
             <div :class="formsStyles.field">
@@ -60,6 +84,7 @@ const canSubmit = computed(
                 <Password
                     v-model="confirmPassword"
                     placeholder="Repeat your password"
+                    minlength="8"
                     toggle-mask
                     :feedback="false"
                     input-id="confirmPassword"
@@ -69,13 +94,15 @@ const canSubmit = computed(
                 <small
                     :class="formsStyles.invalid"
                     v-if="hasPasswordMismatch"
-                    >Passwords don't match</small
-                >
+                    >Passwords don't match
+                </small>
             </div>
         </div>
+        <AlertMessage :model-value="error" />
         <Divider />
         <footer :class="formsStyles.footer">
             <Button
+                :loading="isSending"
                 :disabled="!canSubmit"
                 type="submit"
                 label="Continue"

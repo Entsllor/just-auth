@@ -11,6 +11,7 @@ generateApi({
     modular: false,
     httpClientType: "axios",
     defaultResponseAsSuccess: true,
+    unwrapResponseData: true,
     hooks: {
         onFormatRouteName(routeInfo) {
             return routeInfo.operationId.split("_", 2).at(-1)

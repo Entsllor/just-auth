@@ -5,9 +5,6 @@ import {ArgumentsHost, Catch} from "@nestjs/common";
 export class AllExceptionsFilter extends BaseExceptionFilter {
     catch(exception: any, host: ArgumentsHost) {
         super.catch(exception, host);
-        try {
-            console.error(exception);
-        } catch {
-        }
+        console.error(exception);
     }
 }

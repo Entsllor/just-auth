@@ -1,7 +1,7 @@
 import {Body, Controller, Post, Req} from "@nestjs/common";
 import {Public} from "./decorators/public.decorator";
 import {ParseResponse} from "../helpers/decorators/parse-response";
-import {LoginDto, PrivateUserDto, SignupDto} from "./users/users.schemas";
+import {AuthStateDto, LoginDto, PrivateUserDto, SignupDto} from "./users/users.schemas";
 import {UsersService} from "./users/users.service";
 import {AuthService, IJwtPayload} from "./auth.service";
 import {AllowExpiredJwt} from "./decorators/allow-expired.jwt";
@@ -19,8 +19,11 @@ import {AccessTokenBody} from "./jwt/jwt.pipe";
 @OpenApiSettings("auth", {auth: "public"})
 @Controller("auth")
 export class AuthController {
-    constructor(private readonly usersService: UsersService, private authService: AuthService, private cookies: CookiesService) {
-    }
+    constructor(
+        private readonly usersService: UsersService,
+        private authService: AuthService,
+        private cookies: CookiesService
+    ) {}
 
     @Public()
     @Post("sign-up")
@@ -32,7 +35,11 @@ export class AuthController {
     @Post("refresh")
     @ApiBearerAuth()
     @AllowExpiredJwt()
-    async refresh(@RefreshTokenBody() refreshTokenBody: string, @JwtPayload() payload: IJwtPayload, @Req() req: IRequest) {
+    async refresh(
+        @RefreshTokenBody() refreshTokenBody: string,
+        @JwtPayload() payload: IJwtPayload,
+        @Req() req: IRequest
+    ) {
         const [refreshToken, accessToken] = await this.authService.refreshTokens(refreshTokenBody, payload, {
             authorIp: req.ip || raise(FailedToParseClientIp),
             userAgent: req.get("User-Agent") || "undefined",
@@ -43,22 +50,23 @@ export class AuthController {
 
     @Public()
     @Post("login")
+    @ParseResponse({type: AuthStateDto})
     async login(@Body() loginDto: LoginDto, @Req() req: IRequest) {
-        const {
-            accessToken,
-            refreshToken,
-        } = await this.authService.login(loginDto.email, loginDto.password, {
+        const {accessToken, refreshToken, user} = await this.authService.login(loginDto.email, loginDto.password, {
             authorIp: req.ip || raise(FailedToParseClientIp),
             userAgent: req.get("User-Agent") || "undefined",
         });
         this.cookies.setRefreshToken(refreshToken);
-        return {accessToken};
+        return {accessToken, ...user} satisfies AuthStateDto;
     }
 
     @Post("logout")
     @Public()
     @ApiResponse({status: 204})
-    async logout(@RefreshTokenBody({optional: true}) refreshTokenBody: string | undefined, @AccessTokenBody({optional: true}) accessToken: string) {
+    async logout(
+        @RefreshTokenBody({optional: true}) refreshTokenBody: string | undefined,
+        @AccessTokenBody({optional: true}) accessToken: string
+    ) {
         this.cookies.unsetRefreshToken();
         await this.authService.revokeTokens(refreshTokenBody, accessToken);
     }

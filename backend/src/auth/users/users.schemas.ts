@@ -10,8 +10,12 @@ import {
 } from "./users.const";
 import {timeZoneType} from "../../helpers/validation/tz";
 
-const usernameType = z.string().min(MIN_USERNAME_LENGTH).max(MAX_USERNAME_LENGTH).toLowerCase().regex(new RegExp(`^[a-zA-Z0-9_.]{${MIN_USERNAME_LENGTH},${MAX_USERNAME_LENGTH}}$`));
-
+const usernameType = z
+    .string()
+    .min(MIN_USERNAME_LENGTH)
+    .max(MAX_USERNAME_LENGTH)
+    .toLowerCase()
+    .regex(new RegExp(`^[a-zA-Z0-9_.]{${MIN_USERNAME_LENGTH},${MAX_USERNAME_LENGTH}}$`));
 
 export const SignupSchema = z.object({
     email: z.string().email(),
@@ -24,17 +28,14 @@ export const SignupSchema = z.object({
     timezone: Maybe(timeZoneType),
 });
 
-export class SignupDto extends createZodDto(SignupSchema) {
-}
+export class SignupDto extends createZodDto(SignupSchema) {}
 
 export const LoginSchema = z.object({
     email: z.string().email(),
     password: z.string(),
 });
 
-export class LoginDto extends createZodDto(LoginSchema) {
-}
-
+export class LoginDto extends createZodDto(LoginSchema) {}
 
 export const PublicUserSchema = z.object({
     id: z.string().uuid(),
@@ -45,18 +46,18 @@ export const PublicUserSchema = z.object({
     createdAt: z.coerce.date(),
 });
 
-export class PublicUserDto extends createZodDto(PublicUserSchema) {
-}
+export class PublicUserDto extends createZodDto(PublicUserSchema) {}
 
 export const PrivateUserSchema = PublicUserSchema.extend({
     email: z.string(),
-    updatedAt: z.coerce.date(),
     timezone: Maybe(timeZoneType),
 });
 
-export class PrivateUserDto extends createZodDto(PrivateUserSchema) {
+export class PrivateUserDto extends createZodDto(PrivateUserSchema) {}
 
-}
+const AuthStateSchema = PrivateUserSchema.extend({accessToken: z.string()});
+
+export class AuthStateDto extends createZodDto(AuthStateSchema) {}
 
 const UpdateUserSchema = PrivateUserSchema.pick({
     secondName: true,
@@ -65,5 +66,4 @@ const UpdateUserSchema = PrivateUserSchema.pick({
     timezone: true,
 }).partial();
 
-export class UpdateUserDto extends createZodDto(UpdateUserSchema) {
-}
+export class UpdateUserDto extends createZodDto(UpdateUserSchema) {}

@@ -19,15 +19,14 @@ export interface PrivateUserDto {
      */
     username: string
     /** @maxLength 63 */
-    lastName: string | null
+    lastName?: string | null
     /** @maxLength 63 */
-    firstName: string | null
+    firstName?: string | null
     /** @maxLength 63 */
-    secondName: string | null
+    secondName?: string | null
     createdAt: any
     email: string
-    updatedAt: any
-    timezone: string | null
+    timezone?: string | null
 }
 
 export interface PublicUserDto {
@@ -40,11 +39,11 @@ export interface PublicUserDto {
      */
     username: string
     /** @maxLength 63 */
-    lastName: string | null
+    lastName?: string | null
     /** @maxLength 63 */
-    firstName: string | null
+    firstName?: string | null
     /** @maxLength 63 */
-    secondName: string | null
+    secondName?: string | null
     createdAt: any
 }
 
@@ -73,13 +72,13 @@ export interface SignupDto {
      */
     username: string
     /** @maxLength 63 */
-    lastName: string | null
+    lastName?: string | null
     /** @maxLength 63 */
-    firstName: string | null
+    firstName?: string | null
     /** @maxLength 63 */
-    secondName: string | null
-    birthdate: any
-    timezone: string | null
+    secondName?: string | null
+    birthdate?: any
+    timezone?: string | null
 }
 
 export interface LoginDto {
@@ -88,13 +87,28 @@ export interface LoginDto {
     password: string
 }
 
-import type {
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    HeadersDefaults,
-    ResponseType
-} from "axios"
+export interface AuthStateDto {
+    /** @format uuid */
+    id: string
+    /**
+     * @minLength 5
+     * @maxLength 32
+     * @pattern ^[a-zA-Z0-9_.]{5,32}$
+     */
+    username: string
+    /** @maxLength 63 */
+    lastName?: string | null
+    /** @maxLength 63 */
+    firstName?: string | null
+    /** @maxLength 63 */
+    secondName?: string | null
+    createdAt: any
+    email: string
+    timezone?: string | null
+    accessToken: string
+}
+
+import type {AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType} from "axios"
 import axios from "axios"
 
 export type QueryParamsType = Record<string | number, any>
@@ -208,7 +222,7 @@ export class HttpClient<SecurityDataType = unknown> {
         format,
         body,
         ...params
-    }: FullRequestParams): Promise<AxiosResponse<T>> => {
+    }: FullRequestParams): Promise<T> => {
         const secureParams =
             ((typeof secure === "boolean" ? secure : this.secure) &&
                 this.securityWorker &&
@@ -225,17 +239,19 @@ export class HttpClient<SecurityDataType = unknown> {
             body = JSON.stringify(body)
         }
 
-        return this.instance.request({
-            ...requestParams,
-            headers: {
-                ...(requestParams.headers || {}),
-                ...(type && type !== ContentType.FormData ? {"Content-Type": type} : {})
-            },
-            params: query,
-            responseType: responseFormat,
-            data: body,
-            url: path
-        })
+        return this.instance
+            .request({
+                ...requestParams,
+                headers: {
+                    ...(requestParams.headers || {}),
+                    ...(type && type !== ContentType.FormData ? {"Content-Type": type} : {})
+                },
+                params: query,
+                responseType: responseFormat,
+                data: body,
+                url: path
+            })
+            .then(response => response.data)
     }
 }
 
@@ -374,11 +390,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @request POST:/auth/login
          */
         login: (data: LoginDto, params: RequestParams = {}) =>
-            this.request<void, any>({
+            this.request<AuthStateDto, any>({
                 path: `/auth/login`,
                 method: "POST",
                 body: data,
                 type: ContentType.Json,
+                format: "json",
                 ...params
             }),
 
