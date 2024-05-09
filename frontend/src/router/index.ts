@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from "vue-router"
 import FormLayout from "@/views/FormLayout.vue"
 import {Pages} from "@/types/router"
 import PrivateView from "@/views/PrivateView.vue"
+import {useAuthStore} from "@/stores/auth"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,12 @@ const router = createRouter({
         {
             path: "/__private__",
             redirect: () => ({name: Pages.Profile}),
+            beforeEnter: () => {
+                const store = useAuthStore()
+                if (!store.isAuthorized) {
+                    return {name: Pages.SignIn}
+                }
+            },
             components: {default: PrivateView},
             children: [
                 {

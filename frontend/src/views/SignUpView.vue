@@ -5,31 +5,37 @@ import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import {computed, ref} from "vue"
 import formsStyles from "@/assets/forms.module.css"
-import {useSending} from "@/hooks/use-sending"
-import {api} from "@/api/client"
+import {useAction} from "@/hooks/use-action"
 import AlertMessage from "@/components/AlertMessage.vue"
+import {useAuthStore} from "@/stores/auth"
 
+// states
 const password = ref("")
 const confirmPassword = ref("")
 const email = ref("")
 const username = ref("")
+
+// form errors
 const hasPasswordMismatch = computed(
-    () => !!confirmPassword.value && !!password.value && password.value !== confirmPassword.value
+    () => !!confirmPassword.value && password.value !== confirmPassword.value
 )
+const passwordTooShort = computed(() => password.value.length < 8)
+const usernameTooShort = computed(() => username.value.length < 5)
+const invalidEmail = computed(() => !/.+@.+/.test(email.value))
+
+// form warnings
 const passwordHasLeadingSpace = computed(() => /^.*\s$/.test(password.value))
 const passwordHasTrailingSpace = computed(() => /^\s.*$/.test(password.value))
-const {error, send, isSending} = useSending(api.auth.signup)
-const canSubmit = computed(
-    () =>
-        !!email.value &&
-        !!password.value &&
-        !!confirmPassword.value &&
-        !hasPasswordMismatch.value &&
-        !!username.value
+
+// actions
+const store = useAuthStore()
+const {error, pending, act: signup} = useAction(store.signUp)
+const canSubmit = computed(() =>
+    [invalidEmail, hasPasswordMismatch, passwordTooShort, usernameTooShort].every(ref => !ref.value)
 )
 
 function submit() {
-    send({
+    signup({
         email: email.value,
         password: password.value,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -50,6 +56,11 @@ function submit() {
                     id="email"
                     placeholder="Enter your email"
                 />
+                <small
+                    v-if="email && invalidEmail"
+                    :class="formsStyles.invalid"
+                    >Invalid email</small
+                >
             </div>
             <div :class="formsStyles.field">
                 <label for="username">Username</label>
@@ -58,6 +69,11 @@ function submit() {
                     id="username"
                     placeholder="Enter your username"
                 />
+                <small
+                    v-if="username && usernameTooShort"
+                    :class="formsStyles.invalid"
+                    >Username is too short
+                </small>
             </div>
             <div :class="formsStyles.field">
                 <label for="password">Password</label>
@@ -68,6 +84,11 @@ function submit() {
                     input-id="password"
                     input-class="w-100"
                 />
+                <small
+                    v-if="password && passwordTooShort"
+                    :class="formsStyles.invalid"
+                    >Password is too short
+                </small>
                 <small
                     v-if="passwordHasTrailingSpace"
                     :class="formsStyles.warn"
@@ -102,7 +123,7 @@ function submit() {
         <Divider />
         <footer :class="formsStyles.footer">
             <Button
-                :loading="isSending"
+                :loading="pending"
                 :disabled="!canSubmit"
                 type="submit"
                 label="Continue"

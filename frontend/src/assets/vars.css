@@ -1,3 +1,5 @@
+@import 'primeicons/primeicons.css';
+
 /* color palette */
 :root {
     --c-white: #fff;
@@ -17,28 +19,33 @@
     --space-xxxl: calc(8.5 * var(--space-unit));
     --space-xxxxl: calc(13.75 * var(--space-unit));
 
-    /*  width  */
-    --width-unit: 10rem;
-    --width-xxxxs: calc(0.125 * var(--width-unit));
-    --width-xxxs: calc(0.25 * var(--width-unit));
-    --width-xxs: calc(0.375 * var(--width-unit));
-    --width-xs: calc(0.5 * var(--width-unit));
-    --width-sm: calc(0.75 * var(--width-unit));
-    --width-md: calc(1.25 * var(--width-unit));
-    --width-lg: calc(2 * var(--width-unit));
-    --width-xl: calc(3.25 * var(--width-unit));
-    --width-xxl: calc(5.25 * var(--width-unit));
-    --width-xxxl: calc(8.5 * var(--width-unit));
-    --width-xxxxl: calc(13.75 * var(--width-unit));
+    /*  size  */
+    --size-unit: 10rem;
+    --size-xxxxs: calc(0.125 * var(--size-unit));
+    --size-xxxs: calc(0.25 * var(--size-unit));
+    --size-xxs: calc(0.375 * var(--size-unit));
+    --size-xs: calc(0.5 * var(--size-unit));
+    --size-sm: calc(0.75 * var(--size-unit));
+    --size-md: calc(1.25 * var(--size-unit));
+    --size-lg: calc(2 * var(--size-unit));
+    --size-xl: calc(3.25 * var(--size-unit));
+    --size-xxl: calc(5.25 * var(--size-unit));
+    --size-xxxl: calc(8.5 * var(--size-unit));
+    --size-xxxxl: calc(13.75 * var(--size-unit));
 
     --smooth: 200ms ease-out;
 }
 
 /* semantic color variables for this project */
 :root {
+    --bd-radius: var(--border-radius);
     --c-bg: var(--c-white);
     --c-bg-secondary: var(--surface-200);
-    --c-text: var(--c-black);
+    --c-primary: var(--primary-color);
+    --text-bold: 600;
+    --c-text: var(--text-color);
+    --c-text-secondary: var(--text-color-secondary);
+    --c-text-on-primary: var(--primary-color-text);
     --c-text-error: var(--red-500);
     --c-text-warning: var(--orange-500);
 }
