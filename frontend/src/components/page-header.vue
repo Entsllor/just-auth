@@ -1,31 +1,35 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Avatar from "primevue/avatar"
+import Menubar from "primevue/menubar"
+import {useAuthStore} from "@/stores/auth"
+
+const store = useAuthStore()
+</script>
 
 <template>
     <header :class="$style.header">
-        <span :class="$style.title">
-            <i class="pi pi-lock"></i>
-            <span :class="$style.titleMain">Just</span>
-            <span :class="$style.titleRest">Auth</span>
-        </span>
+        <Menubar>
+            <template #start>
+                <span :class="$style.title">
+                    <span :class="$style.titleMain">Just</span>
+                    <span :class="$style.titleRest">Auth</span>
+                </span>
+            </template>
+            <template #end>
+                <Avatar :label="store.username?.charAt(0)" />
+            </template>
+        </Menubar>
     </header>
 </template>
 
 <style module>
-.header {
-    min-height: var(--size-xxxs);
-    background-color: var(--c-bg-secondary);
-    display: flex;
-    align-items: center;
-}
-
 .title {
-}
-
-.titleMain {
-    color: var(--c-primary);
+    font-size: var(--space-md);
+    font-family: var(--font-family);
+    font-weight: var(--text-bold);
 }
 
 .titleRest {
-    color: var(--c-text-secondary);
+    color: var(--c-primary);
 }
 </style>

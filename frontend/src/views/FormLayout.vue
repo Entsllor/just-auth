@@ -26,7 +26,7 @@ import Panel from "primevue/panel"
     height: 100%;
     width: 100%;
     flex-grow: 1;
-    max-width: var(--width-xl);
+    max-width: var(--width-modal);
 }
 
 .panel {

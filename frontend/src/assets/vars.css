@@ -1,11 +1,9 @@
-@import 'primeicons/primeicons.css';
-
 /* color palette */
 :root {
     --c-white: #fff;
     --c-black: #000;
 
-    /*  sizes  */
+    /*  spaces  */
     --space-unit: 1em;
     --space-xxxxs: calc(0.125 * var(--space-unit));
     --space-xxxs: calc(0.25 * var(--space-unit));
@@ -19,30 +17,20 @@
     --space-xxxl: calc(8.5 * var(--space-unit));
     --space-xxxxl: calc(13.75 * var(--space-unit));
 
-    /*  size  */
-    --size-unit: 10rem;
-    --size-xxxxs: calc(0.125 * var(--size-unit));
-    --size-xxxs: calc(0.25 * var(--size-unit));
-    --size-xxs: calc(0.375 * var(--size-unit));
-    --size-xs: calc(0.5 * var(--size-unit));
-    --size-sm: calc(0.75 * var(--size-unit));
-    --size-md: calc(1.25 * var(--size-unit));
-    --size-lg: calc(2 * var(--size-unit));
-    --size-xl: calc(3.25 * var(--size-unit));
-    --size-xxl: calc(5.25 * var(--size-unit));
-    --size-xxxl: calc(8.5 * var(--size-unit));
-    --size-xxxxl: calc(13.75 * var(--size-unit));
-
     --smooth: 200ms ease-out;
+
+    --width-modal: 480px;
+    --width-container: 1200px;
 }
 
 /* semantic color variables for this project */
 :root {
     --bd-radius: var(--border-radius);
-    --c-bg: var(--c-white);
-    --c-bg-secondary: var(--surface-200);
-    --c-primary: var(--primary-color);
     --text-bold: 600;
+
+    --c-bg: var(--c-white);
+    --c-bg-secondary: var(--surface-100);
+    --c-primary: var(--primary-color);
     --c-text: var(--text-color);
     --c-text-secondary: var(--text-color-secondary);
     --c-text-on-primary: var(--primary-color-text);

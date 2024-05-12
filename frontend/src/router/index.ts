@@ -38,7 +38,6 @@ const router = createRouter({
             children: [
                 {
                     path: "/profile",
-                    name: Pages.Profile,
                     component: () => import("@/views/ProfileView.vue")
                 }
             ]
