@@ -3,4 +3,6 @@ export enum Pages {
     SignUp = "SignUp",
     Index = "Index",
     Profile = "Profile",
+    Sessions = "Sessions",
+    Integrations = "Integrations",
 }

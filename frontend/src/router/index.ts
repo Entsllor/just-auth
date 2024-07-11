@@ -38,7 +38,20 @@ const router = createRouter({
             children: [
                 {
                     path: "/profile",
-                    component: () => import("@/views/ProfileView.vue")
+                    name: Pages.Profile,
+                    component: () => import("@/views/ProfileView.vue"),
+                    children: [
+                        {
+                            path: "sessions",
+                            name: Pages.Sessions,
+                            component: () => import("@/views/SessionsView.vue")
+                        },
+                        {
+                            path: "integrations",
+                            name: Pages.Integrations,
+                            component: () => import("@/views/IntegrationsView.vue")
+                        }
+                    ]
                 }
             ]
         }
