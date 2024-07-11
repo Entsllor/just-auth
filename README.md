@@ -37,6 +37,13 @@ cd scripts
 source ./scripts/run-dev.sh
 ```
 
+### Setting up frontend
+```bash
+cd frontend
+pnpm sync
+pnpm dev
+```
+
 ### Setting up RSA
 
 * Generate keys
